@@ -4,3 +4,22 @@
   font-family: sans-serif;
   line-height: 1.4rem;
 }
+
+#cmdButtons {
+  margin: 0 auto;
+  width: 800px;
+  line-height: 1.4rem;
+}
+
+#cmdButtons button {
+  font-family: sans-serif;
+  font-size: 32px;
+}
+
+.pixelRow {
+
+}
+
+.pixelCol {
+  display: inline;
+}
