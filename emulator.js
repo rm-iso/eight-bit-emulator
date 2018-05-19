@@ -2,6 +2,11 @@ document.body.onload = makeDivs;
 var divArray = new Array(100);
 
 var memory = new Array(1024);
+for (var k = 0; k < 1024; k++) {
+  memory[k] = 0;
+}
+
+var acc = 0;
 
 var LOAD = 1;
 var STORE = 2;
@@ -11,20 +16,42 @@ var COMPARE = 5;
 var GOTO = 6;
 var SET_PIXEL = 7;
 
-var program = [ADD, 5, 3, SUB, 3, 2, STORE, 100, GOTO, 0];
+var program = [LOAD, 0, ADD, 1, STORE, 0, GOTO, 0];
+var slot = 0;
 
-function runProgram() {
-  for (var slot = 0; slot < program.length; slot++) {
-    var instruction = program[slot];
+function runOneInstruction() {
+  console.log(slot);
+  console.log(memory);
+  var instruction = program[slot];
+  var what, where, x, y;
 
-    if (instruction == ADD) {
-
-    } else if (instruction == SUB) {
-
-    } else if (instruction == LOAD) {
-
-    }
+  switch (instruction) {
+    case LOAD:
+      where = program[++slot];
+      acc = memory[where];
+      break;
+    case STORE:
+      where = program[++slot];
+      memory[where] = acc;
+      break;
+    case ADD:
+      acc += program[++slot];
+      break;
+    case SUB:
+      acc -= program[++slot];
+      break;
+    case COMPARE:
+      break;
+    case GOTO:
+      slot = program[++slot] - 1;
+      break;
+    case SET_PIXEL:
+      x = memory[program[++slot]];
+      y = memory[program[++slot]];
+      divArray[y][x].style.backgroundColor = 'red';
+      break;
   }
+  slot++;
 }
 
 function makeDivs () {
@@ -51,6 +78,7 @@ function makeDivs () {
   }
 
   buttonClicks();
+  setInterval(runOneInstruction, 100);
 }
 function buttonClicks () {
   for (var num = 1; num <= 4; num++) {
